@@ -1,6 +1,5 @@
-export const FETCH_TYPES = {
-    FETCH_USER_REQUEST: "FETCH_USER_REQUEST",
-};
+import { FETCH_TYPES } from "./actions";
+import { pendingAction, failedAction } from "../common/functions";
 
 const initialState = {
   pending: false,
@@ -11,10 +10,15 @@ const initialState = {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_TYPES.FETCH_USER_REQUEST:
+    case pendingAction(FETCH_TYPES.FETCH_USER_LIST):
       return {
         ...state,
         pending: true
+      };
+    case failedAction(FETCH_TYPES.FETCH_USER_LIST):
+      return {
+        ...state,
+        pending: false,
       };
     default:
       return {
