@@ -10,7 +10,7 @@ const Users = ({users, fetchUsers}) => {
   return (
     <div>
       {
-        users.map(user => <div>{user.name}</div>)
+        users.map(user => <div key={user.id}>{user.fullname}</div>)
       }
     </div>
   );
@@ -18,8 +18,8 @@ const Users = ({users, fetchUsers}) => {
 
 Users.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    fullname: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired
   }).isRequired).isRequired,
   fetchUsers: PropTypes.func.isRequired

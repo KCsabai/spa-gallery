@@ -5,7 +5,7 @@ const fetchRequest = ({url, method, data}) =>
   fetch(`${process.env.REACT_APP_BASE_API_URL}${url}`, {
     method,
     body: data,
-  });
+  }).then((response) => response.json());
 
 const fetchPending = (data) => ({
   type: pendingAction(data.type),
@@ -13,21 +13,31 @@ const fetchPending = (data) => ({
 
 const fetchSuccess = (data) => ({
   type: successAction(data.type),
-  data
+  data: data.data,
 });
   
 const fetchFailure = (data) => ({
   type: failedAction(data.type),
-  data
+  data: data,
 });
   
 function* fetchSaga(action) {
   yield put(fetchPending(action));
   try {
     const response = yield call(fetchRequest, action);
+
+    if (response.statusCode && response.statusCode >= 400) {
+      return yield put(
+        fetchFailure({
+          error: response.message,
+          type: action.type,
+        })
+      );
+    }
+
     yield put(
       fetchSuccess({
-          data: response.data,
+          data: response,
           type: action.type,
       })
     );
