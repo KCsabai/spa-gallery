@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
-const SignUpContainer = styled.div`
+const SignInContainer = styled.div`
     margin: auto;
     margin-top: 20px;
     width: 50%;
@@ -26,36 +27,35 @@ const DataLabel = styled.label`
 const DataInput = styled.input`
 `;
 
-const SelectInput = styled.select`
-    width: 100%;
-`;
-
 const SubmitButton = styled.button`
     border-radius: 5px;
     border-color: green;
     background-color: green;
 `;
 
-const SignUp = ({ signUp }) => {
+const SignIn = ({ authUser, signIn }) => {
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (authUser) {
+            navigate("/");
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [authUser]);
+
     const onSubmit = (e) => {
         e.preventDefault();
 
-        signUp({
-            fullname: e.target.fullname.value,
+        signIn({
             email: e.target.email.value,
             password: e.target.password.value,
-            role: e.target.role.value
         });
     }
 
     return (
-        <SignUpContainer>
-            <h1>Sign Up</h1>
+        <SignInContainer>
+            <h1>Sign In</h1>
             <DataForm onSubmit={onSubmit}>
-                <DataContainer>
-                    <DataLabel>Full Name</DataLabel>
-                    <DataInput name="fullname" type="text" />
-                </DataContainer>
                 <DataContainer>
                     <DataLabel>Email</DataLabel>
                     <DataInput name="email" type="text" />
@@ -64,17 +64,10 @@ const SignUp = ({ signUp }) => {
                     <DataLabel>Password</DataLabel>
                     <DataInput name="password" type="password" />
                 </DataContainer>
-                <DataContainer>
-                    <DataLabel>Role</DataLabel>
-                    <SelectInput name="role">
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
-                    </SelectInput>
-                </DataContainer>
-                <SubmitButton type="submit">Sign Up</SubmitButton>
+                <SubmitButton type="submit">Sign In</SubmitButton>
             </DataForm>
-        </SignUpContainer>
+        </SignInContainer>
     );
 }
 
-export default SignUp;
+export default SignIn;

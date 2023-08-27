@@ -1,11 +1,16 @@
-import { all, call, put, fork, take } from "redux-saga/effects";
+import { all, call, put, fork, take, select } from "redux-saga/effects";
 import { successAction, failedAction, pendingAction } from "../common/functions";
 
-const fetchRequest = ({url, method, data}) =>
-  fetch(`${process.env.REACT_APP_BASE_API_URL}${url}`, {
+const fetchRequest = ({url, method, data, auth}) => {
+  return  fetch(`${process.env.REACT_APP_BASE_API_URL}${url}`, {
     method,
-    body: data,
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${auth.tokens?.accessToken}`,
+    }
   }).then((response) => response.json());
+}
 
 const fetchPending = (data) => ({
   type: pendingAction(data.type),
@@ -21,10 +26,16 @@ const fetchFailure = (data) => ({
   data: data,
 });
   
+const getAuth = (state) => state.auth
+
 function* fetchSaga(action) {
   yield put(fetchPending(action));
   try {
-    const response = yield call(fetchRequest, action);
+    const auth = yield select(getAuth);
+    const response = yield call(fetchRequest, { 
+      ...action,
+      auth,
+    });
 
     if (response.statusCode && response.statusCode >= 400) {
       return yield put(
