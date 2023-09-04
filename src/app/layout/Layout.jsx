@@ -2,11 +2,11 @@ import React from "react";
 import Header from "./Header";
 import Content from "./Content";
 
-const Layout = ({ authUser }) => {
+const Layout = ({ authUser, logout }) => {
     return (
         <>
-          <Header authUser={authUser} />
-          <Content />
+          <Header authUser={authUser} logout={logout}/>
+          <Content authUser={authUser} />
         </>
     )
 }

@@ -1,5 +1,7 @@
+import store from "./store";
 import { all, call, put, fork, take, select } from "redux-saga/effects";
 import { successAction, failedAction, pendingAction } from "../common/functions";
+import { AUTH_ACTIONS } from "../auth/sign-in/actions";
 
 const fetchRequest = ({url, method, data, auth}) => {
   return  fetch(`${process.env.REACT_APP_BASE_API_URL}${url}`, {
@@ -26,7 +28,15 @@ const fetchFailure = (data) => ({
   data: data,
 });
   
-const getAuth = (state) => state.auth
+const getAuth = (state) => state.auth;
+
+const redirectToHome = () => {
+  window.location.href = "/";
+}
+
+const logout = () => {
+  store.dispatch({ type: AUTH_ACTIONS.LOGOUT });
+}
 
 function* fetchSaga(action) {
   yield put(fetchPending(action));
@@ -36,6 +46,11 @@ function* fetchSaga(action) {
       ...action,
       auth,
     });
+
+    if (response.statusCode && response.statusCode === 401) {
+      logout();
+      redirectToHome();
+    }
 
     if (response.statusCode && response.statusCode >= 400) {
       return yield put(
@@ -53,6 +68,11 @@ function* fetchSaga(action) {
       })
     );
   } catch (e) {
+    if (e.statusCode && e.statusCode === 401) {
+      logout();
+      redirectToHome();
+    }
+
     yield put(
       fetchFailure({
         error: e.message,
