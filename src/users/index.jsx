@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import Users from './Users'
-import { fetchUsers } from './actions'
+import { fetchUsers, userDelete } from './actions'
 
 const mapStateToProps = state => ({
   users: state.users?.list || [],
@@ -9,7 +9,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchUsers: () => dispatch(fetchUsers())
+  fetchUsers: () => dispatch(fetchUsers()),
+  userDelete: (data) => dispatch(userDelete(data)),
 })
 
 export default connect(
