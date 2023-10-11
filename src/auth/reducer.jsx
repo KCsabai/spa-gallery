@@ -17,9 +17,13 @@ export default (state = initialState, action) => {
         pending: true
       };
     case failedAction(FETCH_TYPES.FETCH_SIGN_UP_USER):
-        action?.data?.error?.forEach(message => {
-            toast.error(message);
-        });
+        if (Array.isArray(action?.data?.error)) {
+            action?.data?.error?.forEach(message => {
+                toast.error(message);
+            });
+        } else {
+          toast.error(action?.data?.error);
+        }
 
         return {
         ...state,
