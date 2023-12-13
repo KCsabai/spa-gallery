@@ -20,6 +20,7 @@ export default function Header({ authUser, logout }) {
                     authUser ? (
                         <>
                             <Link className="app-header-options-link" to="/users">Users</Link>
+                            <Link className="app-header-options-link" to="/images">Images</Link>
                             <Logout href="#" onClick={logout}>Logout</Logout>
                         </>
                     ) : (

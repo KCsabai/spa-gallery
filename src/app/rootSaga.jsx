@@ -4,13 +4,19 @@ import { successAction, failedAction, pendingAction } from "../common/functions"
 import { AUTH_ACTIONS } from "../auth/sign-in/actions";
 
 const fetchRequest = ({url, method, data, auth}) => {
+  console.log()
+  const headers = {
+    'Authorization': `Bearer ${auth.tokens?.accessToken}`,
+  };
+
+  if (!(data instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   return  fetch(`${process.env.REACT_APP_BASE_API_URL}${url}`, {
     method,
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${auth.tokens?.accessToken}`,
-    }
+    body: data instanceof FormData ? data : JSON.stringify(data),
+    headers,
   }).then((response) => response.json());
 }
 
