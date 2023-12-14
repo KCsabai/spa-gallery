@@ -9,6 +9,8 @@ import EditUser from "../../users/actions/editContainer";
 import SignUp from "../../auth/sign-up";
 import SignIn from "../../auth/sign-in";
 import Home from "./Home";
+import Images from "../../images";
+import EditImage from "../../images/actions/editContainer";
 
 const ContentContainer = styled.div`
   text-align: center;
@@ -23,6 +25,8 @@ const Content = ({ authUser }) => {
             <>
               <Route exact path="/users" element={<Users />} />
               <Route path="/users/:id" element={<EditUser />} />
+              <Route path="/images" element={<Images />} />
+              <Route path="/images/:id" element={<EditImage />} />
             </>
           ) : (
             <>
